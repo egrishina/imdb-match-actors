@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace MatchActors
 {
     public class Program
@@ -6,13 +8,11 @@ namespace MatchActors
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddMediatR(typeof(Program));
 
             builder.Services.AddControllers();
 
             var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
 
             app.UseHttpsRedirection();
 
