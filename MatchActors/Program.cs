@@ -1,3 +1,4 @@
+using MatchActors.Application;
 using MatchActors.Infrastructure.Database;
 using MatchActors.Infrastructure.ImdbClient;
 using MediatR;
@@ -15,6 +16,8 @@ namespace MatchActors
             builder.Services.AddMediatR(typeof(Program));
             builder.Services.AddSingleton<ICommandBuilder, CommandBuilder>();
             builder.Services.AddSingleton<IActorsRepository, ActorsRepository>();
+            builder.Services.AddSingleton<ICachedActorsResolver, CachedActorsResolver>();
+            builder.Services.AddSingleton<IActorsMatcher, ActorsMatcher>();
             builder.Services.AddHttpClient<IImdbClient, ImdbClient>();
             builder.Services.AddControllers();
 
