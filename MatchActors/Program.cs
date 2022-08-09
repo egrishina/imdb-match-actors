@@ -1,3 +1,8 @@
+using MatchActors.Application;
+using MatchActors.Infrastructure.Database;
+using MatchActors.Infrastructure.ImdbClient;
+using MediatR;
+
 namespace MatchActors
 {
     public class Program
@@ -6,20 +11,21 @@ namespace MatchActors
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
+            builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection(nameof(ConnectionStrings)));
+            builder.Services.Configure<ImdbOptions>(builder.Configuration.GetSection(nameof(ImdbOptions)));
+            builder.Services.AddMediatR(typeof(Program));
+            builder.Services.AddSingleton<ICommandBuilder, CommandBuilder>();
+            builder.Services.AddSingleton<IActorsRepository, ActorsRepository>();
+            builder.Services.AddSingleton<ICachedActorsResolver, CachedActorsResolver>();
+            builder.Services.AddSingleton<IActorsMatcher, ActorsMatcher>();
+            builder.Services.AddHttpClient<IImdbClient, ImdbClient>();
             builder.Services.AddControllers();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
             app.MapControllers();
-
             app.Run();
         }
     }
